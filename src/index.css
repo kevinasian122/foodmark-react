@@ -1,3 +1,8 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 .body{
   display:flex;
   
@@ -6,27 +11,22 @@
   min-width:100vw;
   margin:0;
   padding:0;
+  background: rgb(78,178,195);
+background: linear-gradient(90deg, rgba(78,178,195,1) 0%, rgba(185,223,229,1) 100%);
   
 }
 .right{
   width:85vw;
   display:flex;
   flex-direction:column;
+  
 
 }
-.sidebar{
-  width:20vw;
-  min-height: 100vh;
-  background-color: aqua;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-rows: repeat(9, 55px);
-}
+
 
 .header{
   height: 20vh;
-  background-color: azure;
+  background: transparent;
   display:grid;
   grid-template-rows: repeat(2, 1fr);
   grid-template-columns: repeat(7, 1fr); 
@@ -34,8 +34,8 @@
 
 .main{
   min-height: 80vh;
-  background-color:beige;
-  border: 1px solid #BFBFBF;
+  background: transparent;
+  
   display:flex;
   
 }
@@ -43,13 +43,14 @@
 /* main elements */
   
 .content{
-  height: 75vh;
-  width: 70%;
+  height: 80vh;
+  width: 82%;
   display:grid;
-  padding: 25px;
+  padding: 15px;
   grid-template-rows: repeat(3, 1fr);
   grid-template-columns: repeat(3, 1fr);
-  gap: 25px;
+  gap: 30px;
+  
 }
 div.restaurant{
   border: 2px solid black;
@@ -58,19 +59,30 @@ div.restaurant{
   display: flex;
   flex-direction:column;
   align-items: center;
-  gap: 5px;
+  gap: 8px;
+  
   
 }
-.rightbar{
-  height: 75vh;
-  width:30%;
-}
 .name{
-  font-size: 25px;
+  font-size: 30px;
   font-weight: bold;
+  color:#f1356d;
 }
-.rating.timesvisited{
-  font-size:20px;
+.rating, .timesvisited{
+  font-size:23px;
+}
+.comments{
+  font-size: 20px;
+}
+button.deleteRes{
+  border-radius: 12px;
+  width: 3vw;
+  height: 3vh;
+  border:2px solid black;
+  background-color: transparent;
+}
+button.deleteRes:hover{
+  cursor: pointer;
 }
 
 
@@ -78,22 +90,57 @@ div.restaurant{
 .search{
   grid-column: 1 / 6;
   
-  padding-left: 20px;
-  padding-top: 20px;
+  margin-left: 20px;
+  margin-top: 25px;
+  height:4vh;
+  border-radius: 10px;
+  outline:none;
+  border:none;
+  padding: 10px;
 }
-.search>input{
-  width: 600px;
-}
+
 .profile{
   grid-column: 6 / 8;
   font-size: 30px;
   text-align: center;
+  margin-top: 25px;
 }
+
+.profile>.account{
+  height: 4vh;
+  width: 6vw;
+  border-radius: 12px;
+  border: 1px solid #4eb2c3; 
+  background:transparent;
+  font-size:15px;
+}
+.profile>button:hover{
+  height: 5vh;
+  width: 7vw;
+  cursor: pointer;
+  font-size: 18px;
+}
+
 .buttons{
   display:flex;
   justify-content: center;
   align-items: center;
   
+}
+.buttons>.upload{
+  height: 5vh;
+  width: 8vw;
+  border-radius: 12px;
+  border:transparent;
+  font-size:22px;
+  background:#4eb2c3;
+  
+}
+.buttons>.upload:hover{
+  height: 6vh;
+  width: 9vw;
+  cursor: pointer;
+  font-size: 25px;
 }
 .upload{
   font-size:20px;
@@ -101,16 +148,30 @@ div.restaurant{
 }
 .greeting{
   grid-column: 1 / 6;
-  font-size: 45px;
+  font-size: 40px;
   display:flex;
- gap: 5px;
- padding-left: 20px;
+  gap: 15px;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+
 }
 .buttons{
   grid-column: 6 / 8;
 }
 
 /* sidebar elements*/
+.sidebar{
+  width:20vw;
+  min-height: 100vh;
+  
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-rows: repeat(9, 7vh);
+  
+}
 .title>.food{
   font-size: 38px;
   font-weight: bold;
@@ -132,6 +193,7 @@ div.restaurant{
   font-size:28px;
   color:white;
   text-decoration: none;
+  
 }
 
 
@@ -149,6 +211,9 @@ div.restaurant{
   border-radius: 10px;
   transition: 200ms ease-in-out;
   z-index: 10;
+  display:flex;
+  justify-content: center;
+  align-items: center;
 }
 .modal.active{
   transform:translate(-50%, -50%) scale(1);
@@ -183,3 +248,37 @@ div.restaurant{
   opacity: 1;
   
 }
+
+form.add-restaurant{
+  height: 55vh;
+  width: 30vw;
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap:30px;
+}
+
+form.add-restaurant>input{
+  width: 15vw;
+  height: 5vh;
+  padding: 10px;
+  border-radius:12px;
+  border:none;
+  outline:none;
+  font-size: 18px;
+}
+
+
+.submitbtn{
+  width: 8vw;
+  height: 3vh;
+  border-radius:12px;
+  border:none;
+}
+.submitbtn:hover{
+  width: 9vw;
+  height: 4vh;
+  cursor:pointer;
+}
+
