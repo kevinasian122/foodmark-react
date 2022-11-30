@@ -1,20 +1,24 @@
 import '../index.css';
-const Header = () => {
+const Header = ({filter, handleFilterChange, openForm}) => {
     return (
         <div className="header">
-            <div className="search">
-                <input type="text" placeholder="Search.." />
-            </div>
-            <div className="profile">
-                <p>Kevin Yan</p>
-            </div>
-            <div className="greeting">
-                <div> Hi there, </div>
-                <div>Kevin</div> 
-            </div>
-            <div className="buttons">
-                <button className="upload" onclick="openForm()">+</button>
-            </div>
+              
+              <input 
+              className="search" type="text" placeholder="Search.." 
+               value = {filter} 
+              onChange={handleFilterChange} 
+              />
+              
+              <div className="profile">
+                  <button className="account">Kevin Yan</button>
+              </div>
+              <div className="greeting">
+                  <div> Hi there, </div>
+                  <div>Kevin</div> 
+              </div>
+              <div className="buttons">
+                  <button className="upload" onClick={() => openForm()}>Upload</button>
+              </div>
         </div>
     )
 }

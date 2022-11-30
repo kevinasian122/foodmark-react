@@ -172,6 +172,12 @@ button.deleteRes:hover{
   grid-template-rows: repeat(9, 7vh);
   
 }
+.sidebar>div>a{
+  cursor:pointer;
+}
+.sidebar>div>a:hover{
+  color: #f1356d;
+}
 .title>.food{
   font-size: 38px;
   font-weight: bold;

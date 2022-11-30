@@ -1,21 +1,27 @@
 import './index.css';
 import { useState, useEffect } from 'react'
 import Sidebar from './Components/Sidebar'
-// import Header from './Components/Header'
+import Header from './Components/Header'
+import ShowRes from './Components/ShowRes'
+import Overlay from './Components/Overlay'
 import restaurantService from './services/restaurants'
 
 //TODO
-//add styling to each restaurant block to show info better //partially done
-//setup axios request data //done
-//setup backend //done
-//make production build and deploy
-//connect backend with database
-//add delete button
 //seperate into components
+//maybe change layout so that sidebar is collapsable
+//upload is a restaurant block with a + sign always in the front of everything
 //add scrolling feature to only the restaurants block
+//one large map that shows how far each restaurant is from you, displays all of them as markers
 //each restaurant can be clicked to render a component that shows info + google maps API for ratings and travel time
 //form to add restaurant name section uses google maps API to search for the restaurant and stores it
 //implement user login
+
+//add styling to each restaurant block to show info better //partially done
+//setup axios request data //done
+//setup backend //done
+//make production build and deploy //done
+//connect backend with database //done
+//add delete button //done
 function App() {
 
   const [showForm, setShowForm] = useState(false)
@@ -25,6 +31,7 @@ function App() {
   const [newComments, setNewComments] = useState('')
   const [restaurants, setRestaurants] = useState([])
   const [filter, setNewFilter] = useState ('')
+  const [showMap, setShowMap] = useState(false)
 
 
   const hook = () => {
@@ -65,8 +72,13 @@ function App() {
       setRestaurants(restaurants.filter(r => r.id !== id))
     }
   }
-  const active = showForm? 'active':'' //for the popup, for some reason having it in seperate component dont focus
-  const classes = `modal ${active}`
+
+  const openMap = () => {
+    setShowMap(true)
+  }
+  const openHome = () => {
+    setShowMap(false)
+  }
 
    //adding new restaurant
    const addRes = (e) => {
@@ -90,57 +102,36 @@ function App() {
     
   }
 
-  
-  const Overlay = () => {
-    const active = showForm? 'active':''
-    const classes = `overlay ${active}`
-    return (
-      <div className={classes} onClick = {() => closeForm()}></div> 
-    )
-  }
-
-
-
-  const ShowRes = () => {
-    return resToShow.map(res => 
-      <div key={res.id} className = "restaurant"> <div className = "name"> {res.name}</div> 
-      <div className = "rating"> Rating: {res.rating}/10 </div> 
-      <div className = "timesvisited">Visited: {res.timesVisited}  </div> 
-      <div className = "comments">{res.comments}</div> 
-      <button className="deleteRes" onClick = {() => deleteRes(res.id)}>Delete</button></div>
-    )
-  }
-
+  const active = showForm? 'active':'' //for the popup, for some reason having it in seperate component dont focus
+  const classes = `modal ${active}`
   const resToShow = restaurants.filter(res => res.name.toLowerCase().includes(filter.toLowerCase()))
+
+  if(showMap){
+    return (
+      <div className='body'>
+        <Sidebar openHome={openHome} openMap = {openMap}/>
+       
+      
+      
+      </div>
+    )
+  } 
   return (
+    
     <div className='body'>
-      <Sidebar />
+      <Sidebar openHome={openHome} openMap = {openMap}/>
       <div className = 'right'>
-        <div className="header">
-              
-              <input 
-              className="search" type="text" placeholder="Search.." 
-               value = {filter} 
-              onChange={handleFilterChange} 
-              />
-              
-              <div className="profile">
-                  <button className="account">Kevin Yan</button>
-              </div>
-              <div className="greeting">
-                  <div> Hi there, </div>
-                  <div>Kevin</div> 
-              </div>
-              <div className="buttons">
-                  <button className="upload" onClick={() => openForm()}>Upload</button>
-              </div>
-          </div>
+        <Header handleFilterChange={handleFilterChange} filter={filter} openForm = {openForm} />
+        
           <div className="main">
             <div className="content">
-              <ShowRes />
+              <ShowRes resToShow ={resToShow} deleteRes = {deleteRes}/>
             </div>
           </div>
       </div>
+      <Overlay showForm={showForm} deleteRes={deleteRes}/>
+
+
       <div className = {classes} id = "modal">
           <div className = "close-btn" onClick = {() => closeForm()}>&times;</div>
           <form action = "" className = "add-restaurant" onSubmit = {addRes}>
@@ -185,7 +176,7 @@ function App() {
           </form>
         </div>
       
-    <Overlay />
+    
     </div>
   )
 }
