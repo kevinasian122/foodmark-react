@@ -5,7 +5,7 @@ import Header from './Components/Header'
 import ShowRes from './Components/ShowRes'
 import Overlay from './Components/Overlay'
 import restaurantService from './services/restaurants'
-
+import { GoogleMap, useJsApiLoader, Marker, Autocomplete } from '@react-google-maps/api';
 //TODO
 //seperate into components
 //maybe change layout so that sidebar is collapsable
@@ -32,13 +32,37 @@ function App() {
   const [restaurants, setRestaurants] = useState([])
   const [filter, setNewFilter] = useState ('')
   const [showMap, setShowMap] = useState(false)
+  const [expand, setExpand] = useState(false)
+  const [resShow, setResShow] = useState()
+  const [newImage, setNewImage] = useState()
 
+  const tempInitial = [
+    {
+      name: "Gyubee",
+      rating: 9,
+      timesVisited: 5,
+      comments: "sadasdas",
+      id: 3
+    },
+    {
+      name: "asd",
+      rating: 9,
+      timesVisited: 5,
+      comments: "sadasdas",
+      id: 4
+    }
+  ]
+    
+  
 
   const hook = () => {
+    setRestaurants(tempInitial)
+    /*
     restaurantService.getAll()
     .then(initial => {
       setRestaurants(initial)
     })
+    */
   }
   useEffect(hook, [])
 
@@ -65,11 +89,15 @@ function App() {
     setNewFilter(e.target.value)
     
   }
+  const handleImageChange = (e) => {
+    setNewImage(e.target.value)
+  }
   const deleteRes = (id) => {
     const target = restaurants.find(res => id === res.id)
     if(window.confirm(`Delete ${target}?`)){
       restaurantService.del(id)
       setRestaurants(restaurants.filter(r => r.id !== id))
+      setExpand(false)
     }
   }
 
@@ -78,6 +106,7 @@ function App() {
   }
   const openHome = () => {
     setShowMap(false)
+    setExpand(false)
   }
 
    //adding new restaurant
@@ -102,19 +131,71 @@ function App() {
     
   }
 
+  const handleExpand = (res) => {
+    setExpand(true)
+    setResShow(res)
+    
+  }
+
   const active = showForm? 'active':'' //for the popup, for some reason having it in seperate component dont focus
   const classes = `modal ${active}`
   const resToShow = restaurants.filter(res => res.name.toLowerCase().includes(filter.toLowerCase()))
 
+
+  //maps
+  const { isLoaded } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: process.env.REACT_APP_MAPS_API_KEY,
+    libraries: ['places'],
+  })
+  const center = {lat:43.4723, lng: -80.5449}
+
   if(showMap){
+    if(!isLoaded){
+      return <div>Loading...</div>
+    }
     return (
       <div className='body'>
         <Sidebar openHome={openHome} openMap = {openMap}/>
-       
+        <div className = 'right'>
+          <GoogleMap center={center} zoom = {15} mapContainerStyle={{width:'85vw', height: '100vh'}}>
+            <Marker position={center} />
+          </GoogleMap>
+        </div>
       
       
       </div>
     )
+  }
+  if(expand){
+    return(
+      <div className='body'>
+          <Sidebar openHome={openHome} openMap = {openMap}/>
+          <div className = 'right'>
+            <div className="expand">
+              <div className="extitle">
+                {resShow.name}
+              </div>
+              <div className="exbody">
+                <div className="exinfo">
+                  <div className="exrating">Rating: {resShow.rating} / 10</div>
+                  <div className="exvisited">Times Visited: {resShow.timesVisited}</div>
+                  <div className="excomments">Comments: {resShow.comments}</div>
+                  <button className="exdeleteRes" onClick = {() => deleteRes(resShow.id)}>Delete</button>
+                </div>
+                <div className="receipt">
+                  <img src = 'https://media.istockphoto.com/id/889405434/vector/realistic-paper-shop-receipt-vector-cashier-bill-on-white-background.jpg?s=1024x1024&w=is&k=20&c=B_OzWMDe-lUIpeXqq0OChs-i871pFd448uNk_mEy8Ck='></img>
+                </div>
+              </div>
+              
+            </div>
+            
+          </div>
+        
+        
+      </div>
+    )
+    
   } 
   return (
     
@@ -125,7 +206,7 @@ function App() {
         
           <div className="main">
             <div className="content">
-              <ShowRes resToShow ={resToShow} deleteRes = {deleteRes}/>
+              <ShowRes resToShow ={resToShow} deleteRes = {deleteRes} handleExpand={handleExpand}/>
             </div>
           </div>
       </div>
@@ -136,14 +217,17 @@ function App() {
           <div className = "close-btn" onClick = {() => closeForm()}>&times;</div>
           <form action = "" className = "add-restaurant" onSubmit = {addRes}>
               <h2>New Restaurant</h2>
-              <input
-              className = "getName"
-              type = "text"
-              value={newName}
-              onChange={handleNameChange}
-              placeholder = "Name"
-              required
-              maxLength = "200" />
+              
+                <input
+                className = "getName"
+                type = "text"
+                value={newName}
+                onChange={handleNameChange}
+                placeholder = "Name"
+                required
+                maxLength = "200" />
+              
+              
 
               <input
               className = "getRating"
@@ -172,6 +256,13 @@ function App() {
               placeholder = "Comments"
               required 
               maxLength = "200" />
+
+              <input 
+              className = "getReceipt"
+              type="file" 
+              accept="image/*" 
+              value = {newImage}
+              onChange={handleImageChange} />
               <button className = "submitbtn" type = "submit">Submit</button>
           </form>
         </div>

@@ -53,7 +53,8 @@ background: linear-gradient(90deg, rgba(78,178,195,1) 0%, rgba(185,223,229,1) 10
   
 }
 div.restaurant{
-  border: 2px solid black;
+  
+  background-color: #F0EAD6;
   border-radius: 20px;
   padding: 20px;
   display: flex;
@@ -62,6 +63,9 @@ div.restaurant{
   gap: 8px;
   
   
+}
+div.restaurant:hover{
+  cursor: pointer;
 }
 .name{
   font-size: 30px;
@@ -162,7 +166,7 @@ button.deleteRes:hover{
 
 /* sidebar elements*/
 .sidebar{
-  width:20vw;
+  width:15vw;
   min-height: 100vh;
   
   background: transparent;
@@ -288,3 +292,53 @@ form.add-restaurant>input{
   cursor:pointer;
 }
 
+/* expanded elements */
+.expand{
+  display:flex;
+  height:100vh;
+  flex-direction: column;
+  align-items: center;
+  padding-top:1vh;
+  font-family:cursive;
+  gap:3vh;
+
+}
+.expand>.extitle{
+  font-size: 5rem;
+  color:#f1356d;
+
+}
+.exbody{
+  display:flex;
+  
+}
+.exinfo{
+  
+  display:flex;
+  flex-direction:column;
+  align-items: center;
+  gap: 1rem;
+  font-size: 3rem;
+  width:50%;
+}
+.exdeleteRes{
+  font-family:cursive;
+  height: 5vh;
+  width: 6vw;
+  font-size: 1.5rem;
+  border-radius: 10px;
+}
+.exdeleteRes:hover{
+  cursor: pointer;
+  background-color: rgb(246, 45, 45);
+}
+.receipt{
+  width:50%;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+.receipt>img{
+  width: 80%;
+  height: auto;
+}
