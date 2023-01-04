@@ -1,5 +1,5 @@
 import '../index.css';
-const Sidebar = ({openHome, openMap}) => {
+const Sidebar = ({openHome, openMap, openFavourite, openUnvisited}) => {
     return (
         <div className="sidebar">
             <div className="title">
@@ -13,10 +13,10 @@ const Sidebar = ({openHome, openMap}) => {
                 <a onClick={() => openMap()}>Map</a>
             </div>
             <div className="Favourites">
-                <a>Favourites</a>
+                <a onClick = {() => openFavourite()}>Favourites</a>
             </div>
-            <div className="Visited">
-                <a>Visited</a>
+            <div className="Not Visited">
+                <a onClick = {() => openUnvisited()}>Not Visited</a>
             </div>
             <div className="Interested">
                 <a>Interested</a>

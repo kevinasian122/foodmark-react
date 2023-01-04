@@ -7,7 +7,10 @@ const getAll = () => {
 }
 
 const create = newObject => {
-    const request = axios.post(baseUrl, newObject)
+    const request = axios.post(baseUrl, newObject, {headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+    })
     return request.then(response => response.data)
   }
 
@@ -19,5 +22,10 @@ const del = id => {
     const request = axios.put(`${baseUrl}/${id}`, newObject)
     return request.then(response => response.data)
   }
+
+const getMapsKey = () => {
+  const request = axios.get('/api/maps-key')
+  return request.then(response => response.data)
+}
   
-  export default { getAll, create, update, del }
+  export default { getAll, create, update, del, getMapsKey}
