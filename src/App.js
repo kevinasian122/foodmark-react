@@ -26,12 +26,11 @@ import axios from 'axios';
 //make production build and deploy //done
 //connect backend with database //done
 //add delete button //done
-function App() {
+function App({mapsKey}) {
 
   const [showForm, setShowForm] = useState(false)
   const [newName, setNewName] = useState('')
   const [newRating, setNewRating] = useState('')
-  const [newVisited, setNewVisited] = useState('')
   const [newComments, setNewComments] = useState('')
   const [restaurants, setRestaurants] = useState([])
   const [filter, setNewFilter] = useState ('')
@@ -46,7 +45,6 @@ function App() {
   const [newPlace, setNewPlace] = useState('')
 
   const [selected, setSelected] = useState(null)
-  const [mapsKey, setMapsKey] = useState(null)
 
   const tempInitial = [
     {
@@ -81,8 +79,43 @@ function App() {
       website: "https://developers.google.com/maps/documentation/places/web-service/details",
       name: "Gyubee",
       rating: 9,
-      timesVisited: 5,
-      comments: "sadasdas",
+      comments: "sadasdasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss",
+      visited: true,
+      favourite: false,
+      id: 3
+    },{
+      mapsRating: 8,
+      mapsRatingCount: 3000,
+      coordinates: {
+        lat:43.4723, 
+        lng: -80.5449
+      },
+      openHours:[
+        {
+          "close": { "day": 1, "time": "1700" },
+          "open": { "day": 1, "time": "0900" },
+        },
+        {
+          "close": { "day": 2, "time": "1700" },
+          "open": { "day": 2, "time": "0900" },
+        },
+        {
+          "close": { "day": 3, "time": "1700" },
+          "open": { "day": 3, "time": "0900" },
+        },
+        {
+          "close": { "day": 4, "time": "1700" },
+          "open": { "day": 4, "time": "0900" },
+        },
+        {
+          "close": { "day": 5, "time": "1700" },
+          "open": { "day": 5, "time": "0900" },
+        },
+      ],
+      website: "https://developers.google.com/maps/documentation/places/web-service/details",
+      name: "Gyubee",
+      rating: 9,
+      comments: "sadasdasssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWSS",
       visited: true,
       favourite: false,
       id: 3
@@ -98,14 +131,13 @@ function App() {
       setRestaurants(initial)
       
     })
-    restaurantService.getMapsKey()
-    .then(result => {
-      console.log(result)
-      setMapsKey(result.apiKey)
-    })
+    
     
   }
   useEffect(hook, [])
+  
+  
+  
 
   //handle form
   const openForm = () => {
@@ -114,7 +146,6 @@ function App() {
   const closeForm = () => {
     setNewName('')
     setNewRating('')
-    setNewVisited('')
     setNewComments('')
     setNewImage('')
     setShowForm(false)
@@ -125,9 +156,7 @@ function App() {
   const handleRatingChange = (e) => {
     setNewRating(e.target.value)
   }
-  const handleVisitedChange = (e) => {
-    setNewVisited(e.target.value)
-  }
+
   const handleCommentsChange = (e) => {
     setNewComments(e.target.value)
   }
@@ -182,7 +211,6 @@ function App() {
       website: newPlace.website,
       name: newName,
       rating: newRating,
-      timesVisited: newVisited,
       comments: newComments,
       visited: false,
       favourite: false,
@@ -234,19 +262,21 @@ function App() {
 
 
   //Maps
+  const libraries = ["places"]
+  
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: mapsKey,
-    libraries: ["places"]
+    libraries: libraries
   })
-  const mapRef = useRef(null);
-  const [zoom, setZoom] = useState(15);
+  const mapRef = useRef(null)
+  const [zoom, setZoom] = useState(15)
 
-  const [center, setCenter] = useState({lat:43.4723, lng: -80.5449});
+  const [center, setCenter] = useState({lat:43.4723, lng: -80.5449})
 
   useEffect(() => {
     if (mapRef.current) {
-      setZoom(mapRef.current.getZoom());
-      setCenter(mapRef.current.getCenter());
+      setZoom(mapRef.current.getZoom())
+      setCenter(mapRef.current.getCenter())
     }
   }, []);
  
@@ -281,6 +311,7 @@ function App() {
   if(!isLoaded){
     return <div>Loading...</div>
   }
+ 
   if(showMap){
     if(!isLoaded){
       return <div>Loading...</div>
@@ -307,6 +338,7 @@ function App() {
                 setSelected(res)
                }} />
             )}
+            <Marker position = {center}/>
             
             {selected? (<InfoWindow position={{lat: selected.coordinates.lat, lng: selected.coordinates.lng}} onCloseClick={() => setSelected(null)}>
               <div>
@@ -345,7 +377,6 @@ function App() {
               <div className="exbody">
                 <div className="exinfo">
                   <div className="exrating">Rating: {resShow.rating} / 10</div>
-                  <div className="exvisited">Times Visited: {resShow.timesVisited}</div>
                   <div className="excomments">Comments: {resShow.comments}</div>
                   <div className="visited">{resShow.visited ? 'visited': 'not visited'}</div>
                   <div className="opennow">{openNow ? 'Open': 'Closed'} Now</div>
@@ -424,15 +455,6 @@ function App() {
               required
               min = "0"
               max = "10" />
-
-              <input
-              className = "getTimesvisited"
-              type = "number"
-              value = {newVisited}
-              onChange={handleVisitedChange}
-              placeholder = "Times Visited"
-              required 
-              min = "0" />
 
               <input
               className = "getComments"
